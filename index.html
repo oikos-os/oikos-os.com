@@ -1,217 +1,727 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>oikOS — The OS for your AI.</title>
-    <meta name="description" content="A sovereign AI operating system. Local-first. Identity-persistent. Adversarially hardened. Your data never leaves your machine.">
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
-    <style>
-        *, *::before, *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            border-radius: 0;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>oikOS — The home for AI agents</title>
+  <meta name="description" content="A sovereign AI operating system. Local-first. Open source. Your data never leaves your machine.">
+  <meta property="og:title" content="oikOS — The home for AI agents">
+  <meta property="og:description" content="A sovereign AI operating system. Local-first. Open source. Your data never leaves your machine.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://oikos-os.com">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="oikOS — The home for AI agents">
+  <meta name="twitter:description" content="A sovereign AI operating system. Local-first. Open source.">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><path d='M20 4 L34 13 L30 31 L10 31 L6 13 Z' fill='none' stroke='%23D4A017' stroke-width='2.5'/><path d='M20 14 L26 19 L14 19 Z' fill='none' stroke='%23D4A017' stroke-width='1.5'/><rect x='17' y='20' width='6' height='8' fill='none' stroke='%23D4A017' stroke-width='1.5' rx='0.5'/></svg>">
 
-        body {
-            background: #0A0A0A;
-            color: #E0E0E0;
-            font-family: 'Source Sans 3', sans-serif;
-            font-weight: 400;
-            line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
-        }
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-        .container {
-            max-width: 720px;
-            margin: 0 auto;
-            padding: 80px 24px 60px;
-            text-align: center;
-        }
+  <style>
+    :root {
+      --amber: #D4A017;
+      --amber-bright: #FFB000;
+      --amber-dim: #8B6914;
+      --amber-ghost: #5A4510;
+      --amber-faint: #3D2E0A;
+      --bg: #0D0D0D;
+      --bg-warm: #1A1205;
+      --bg-card: #111110;
+      --text: #C8B88A;
+      --text-dim: #7A6B45;
+      --border: #2A2210;
+      --glow: 0 0 20px rgba(212, 160, 23, 0.15), 0 0 60px rgba(212, 160, 23, 0.05);
+      --glow-text: 0 0 10px rgba(212, 160, 23, 0.4);
+      --font-display: 'VT323', monospace;
+      --font-body: 'IBM Plex Mono', monospace;
+      --font-brand: 'Space Grotesk', sans-serif;
+    }
 
-        .logo {
-            width: 180px;
-            height: auto;
-            margin-bottom: 32px;
-        }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        @media (min-width: 640px) {
-            .logo {
-                width: 240px;
-            }
-        }
+    html { scroll-behavior: smooth; }
 
-        .wordmark {
-            font-family: 'DM Sans', sans-serif;
-            font-weight: 700;
-            font-size: 3rem;
-            color: #E0E0E0;
-            letter-spacing: -0.02em;
-            margin-bottom: 8px;
-        }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 14px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
 
-        .tagline {
-            font-family: 'DM Sans', sans-serif;
-            font-weight: 500;
-            font-size: 1.25rem;
-            color: #D4A017;
-            margin-bottom: 48px;
-        }
+    /* CRT Scanlines */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.06) 2px,
+        rgba(0,0,0,0.06) 4px
+      );
+      pointer-events: none;
+      z-index: 9999;
+    }
 
-        .value-prop {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #B0B0B0;
-            margin-bottom: 48px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
+    /* Vignette */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.4) 100%);
+      pointer-events: none;
+      z-index: 9998;
+    }
 
-        .buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            align-items: center;
-            margin-bottom: 64px;
-        }
+    /* Animations */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-        @media (min-width: 480px) {
-            .buttons {
-                flex-direction: row;
-                justify-content: center;
-            }
-        }
+    @keyframes glow-pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
 
-        .btn {
-            display: inline-block;
-            padding: 14px 32px;
-            font-family: 'Source Sans 3', sans-serif;
-            font-weight: 600;
-            font-size: 1rem;
-            text-decoration: none;
-            border: 1px solid;
-            transition: background 0.2s, color 0.2s;
-        }
+    @keyframes cursor-blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
 
-        .btn-primary {
-            background: #D4A017;
-            color: #0A0A0A;
-            border-color: #D4A017;
-        }
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      92% { opacity: 1; }
+      93% { opacity: 0.8; }
+      94% { opacity: 1; }
+    }
 
-        .btn-primary:hover {
-            background: #E8B52A;
-            border-color: #E8B52A;
-        }
+    .fade-up {
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards;
+    }
 
-        .btn-secondary {
-            background: transparent;
-            color: #E0E0E0;
-            border-color: #333;
-        }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
+    .delay-5 { animation-delay: 0.5s; }
+    .delay-6 { animation-delay: 0.6s; }
 
-        .btn-secondary:hover {
-            background: #1A1A1A;
-            border-color: #555;
-        }
+    /* Layout */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
 
-        .features {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 24px;
-            margin-bottom: 80px;
-        }
+    /* ═══════ HERO ═══════ */
+    .hero {
+      padding: 100px 0 80px;
+      text-align: center;
+      position: relative;
+    }
 
-        @media (min-width: 640px) {
-            .features {
-                grid-template-columns: 1fr 1fr 1fr;
-            }
-        }
+    .hero-glow {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -60%);
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(212,160,23,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
 
-        .feature {
-            border: 1px solid #1A1A1A;
-            padding: 32px 24px;
-            text-align: left;
-        }
+    .logo-mark {
+      display: inline-block;
+      margin-bottom: 24px;
+      animation: glow-pulse 4s ease-in-out infinite;
+    }
 
-        .feature h3 {
-            font-family: 'DM Sans', sans-serif;
-            font-weight: 700;
-            font-size: 1rem;
-            color: #E0E0E0;
-            margin-bottom: 12px;
-        }
+    .logo-mark svg {
+      filter: drop-shadow(0 0 12px rgba(212,160,23,0.4));
+    }
 
-        .feature p {
-            font-size: 0.9rem;
-            color: #808080;
-            line-height: 1.6;
-        }
+    .hero h1 {
+      font-family: var(--font-brand);
+      font-size: 56px;
+      font-weight: 700;
+      color: var(--amber);
+      letter-spacing: 2px;
+      text-shadow: var(--glow-text);
+      margin-bottom: 12px;
+      animation: flicker 8s infinite;
+    }
 
-        footer {
-            border-top: 1px solid #1A1A1A;
-            padding-top: 32px;
-            text-align: center;
-        }
+    .tagline {
+      font-family: var(--font-display);
+      font-size: 26px;
+      color: var(--amber-dim);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+    }
 
-        footer p {
-            font-size: 0.85rem;
-            color: #555;
-            line-height: 1.8;
-        }
+    .hero-desc {
+      font-size: 15px;
+      color: var(--text-dim);
+      max-width: 560px;
+      margin: 0 auto 40px;
+      line-height: 1.8;
+    }
 
-        footer a {
-            color: #D4A017;
-            text-decoration: none;
-        }
+    /* Install block */
+    .install-block {
+      background: var(--bg-warm);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 20px 28px;
+      display: inline-block;
+      text-align: left;
+      position: relative;
+      max-width: 600px;
+      width: 100%;
+    }
 
-        footer a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    .install-label {
+      font-family: var(--font-display);
+      font-size: 14px;
+      color: var(--amber-ghost);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .install-cmd {
+      font-family: var(--font-body);
+      font-size: 14px;
+      color: var(--amber);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .install-cmd .prompt { color: var(--amber-dim); }
+    .install-cmd code { flex: 1; }
+    .install-cmd .cursor {
+      display: inline-block;
+      width: 8px;
+      height: 16px;
+      background: var(--amber);
+      animation: cursor-blink 1s step-end infinite;
+    }
+
+    .install-copy {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--amber-dim);
+      font-family: var(--font-body);
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .install-copy:hover {
+      border-color: var(--amber);
+      color: var(--amber);
+    }
+
+    /* CTAs */
+    .cta-row {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      margin-top: 28px;
+      flex-wrap: wrap;
+    }
+
+    .cta {
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 500;
+      padding: 10px 24px;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: all 0.2s;
+      letter-spacing: 0.5px;
+    }
+
+    .cta-primary {
+      background: var(--amber);
+      color: var(--bg);
+      border: 1px solid var(--amber);
+    }
+    .cta-primary:hover {
+      background: var(--amber-bright);
+      box-shadow: var(--glow);
+    }
+
+    .cta-secondary {
+      background: transparent;
+      color: var(--amber-dim);
+      border: 1px solid var(--border);
+    }
+    .cta-secondary:hover {
+      border-color: var(--amber-dim);
+      color: var(--amber);
+    }
+
+    /* ═══════ STATS BAR ═══════ */
+    .stats-bar {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 20px 0;
+      margin-bottom: 80px;
+    }
+
+    .stats-row {
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-value {
+      font-family: var(--font-display);
+      font-size: 32px;
+      color: var(--amber);
+      text-shadow: var(--glow-text);
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: var(--text-dim);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    /* ═══════ SECTIONS ═══════ */
+    section {
+      margin-bottom: 80px;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 28px;
+      color: var(--amber);
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+      text-shadow: var(--glow-text);
+    }
+
+    .section-sub {
+      color: var(--text-dim);
+      font-size: 13px;
+      margin-bottom: 32px;
+    }
+
+    /* Feature grid */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .feature {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 24px;
+      transition: border-color 0.3s;
+    }
+    .feature:hover {
+      border-color: var(--amber-faint);
+    }
+
+    .feature-icon {
+      font-family: var(--font-display);
+      font-size: 22px;
+      color: var(--amber);
+      margin-bottom: 8px;
+    }
+
+    .feature-name {
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--amber-dim);
+      margin-bottom: 6px;
+    }
+
+    .feature-desc {
+      font-size: 12px;
+      color: var(--text-dim);
+      line-height: 1.7;
+    }
+
+    /* Comparison table */
+    .comparison {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .comparison th {
+      font-family: var(--font-display);
+      font-size: 16px;
+      color: var(--amber);
+      text-align: left;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      letter-spacing: 1px;
+    }
+
+    .comparison td {
+      padding: 10px 16px;
+      border-bottom: 1px solid rgba(42, 34, 16, 0.5);
+      color: var(--text-dim);
+    }
+
+    .comparison tr td:first-child {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .comparison .check { color: var(--amber); }
+    .comparison .cross { color: #4A3A1A; }
+
+    /* Tools list */
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 8px;
+    }
+
+    .tool-group-name {
+      font-family: var(--font-display);
+      font-size: 15px;
+      color: var(--amber-dim);
+      margin-bottom: 4px;
+    }
+
+    .tool-group-list {
+      font-size: 12px;
+      color: var(--text-dim);
+      line-height: 1.8;
+    }
+
+    /* Code example */
+    .code-block {
+      background: var(--bg-warm);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 24px;
+      overflow-x: auto;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .code-block .kw { color: var(--amber); }
+    .code-block .str { color: var(--amber-dim); }
+    .code-block .comment { color: var(--amber-ghost); }
+    .code-block .fn { color: var(--amber-bright); }
+    .code-block .param { color: var(--text); }
+
+    /* Philosophy */
+    .quote {
+      border-left: 2px solid var(--amber-faint);
+      padding: 16px 24px;
+      margin: 16px 0;
+      font-style: italic;
+      color: var(--text-dim);
+    }
+
+    .quote em {
+      color: var(--amber-dim);
+      font-style: normal;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 0;
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      color: var(--amber-dim);
+      text-decoration: none;
+      font-size: 13px;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--amber); }
+
+    .footer-note {
+      font-size: 11px;
+      color: var(--amber-ghost);
+      letter-spacing: 1px;
+    }
+
+    /* ═══════ RESPONSIVE ═══════ */
+    @media (max-width: 640px) {
+      .hero h1 { font-size: 40px; }
+      .tagline { font-size: 18px; letter-spacing: 2px; }
+      .stats-row { gap: 24px; }
+      .install-block { padding: 16px; }
+      .install-cmd { font-size: 12px; }
+      .features { grid-template-columns: 1fr; }
+      .comparison { font-size: 12px; }
+      .comparison th, .comparison td { padding: 8px 10px; }
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      body::before, body::after { display: none; }
+      * { animation-duration: 0s !important; }
+    }
+  </style>
 </head>
+
 <body>
-    <div class="container">
-        <img src="oikos_mark_neon_v1_1024.png" alt="oikOS" class="logo">
 
-        <h1 class="wordmark">oikOS</h1>
-        <p class="tagline">The OS for your AI.</p>
+  <!-- ═══════ HERO ═══════ -->
+  <section class="hero">
+    <div class="hero-glow"></div>
+    <div class="container" style="position:relative;">
 
-        <p class="value-prop">
-            A sovereign AI operating system. Local-first. Identity-persistent.
-            Adversarially hardened. 632 tests. 10-probe gauntlet. Open-source core.
-            Your data never leaves your machine.
-        </p>
+      <div class="logo-mark fade-up">
+        <svg width="64" height="64" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 4 L34 13 L30 31 L10 31 L6 13 Z" stroke="#D4A017" stroke-width="1.8" fill="none"/>
+          <path d="M20 14 L26 19 L14 19 Z" stroke="#D4A017" stroke-width="1.2" fill="none"/>
+          <rect x="17" y="20" width="6" height="8" rx="0.5" stroke="#D4A017" stroke-width="1.2" fill="none"/>
+        </svg>
+      </div>
 
-        <div class="buttons">
-            <a href="https://github.com/Pachacutie" class="btn btn-secondary">Free Skills on GitHub</a>
-            <a href="https://pachacutie.gumroad.com/l/grobr" class="btn btn-primary">Sovereign Kernel on Gumroad</a>
+      <h1 class="fade-up delay-1">oikOS</h1>
+      <p class="tagline fade-up delay-2">The home for AI agents</p>
+
+      <p class="hero-desc fade-up delay-3">
+        A sovereign AI operating system that runs on your machine.
+        Adversarial security. Tiered memory. Identity persistence.
+        Your data never leaves your hardware.
+      </p>
+
+      <div class="install-block fade-up delay-4">
+        <div class="install-label">quickstart</div>
+        <div class="install-cmd">
+          <span class="prompt">$</span>
+          <code>docker compose up -d &amp;&amp; oikos serve</code>
+          <span class="cursor"></span>
         </div>
+        <button class="install-copy" onclick="copyInstall()">copy</button>
+      </div>
 
-        <div class="features">
-            <div class="feature">
-                <h3>Identity that persists</h3>
-                <p>Four structured files define who your AI is. They load first, every session, with a reserved budget that search results can never invade.</p>
-            </div>
-            <div class="feature">
-                <h3>Memory that's architecture, not storage</h3>
-                <p>Four tiers with differentiated persistence. Your AI's mission doesn't compete with yesterday's notes for context space.</p>
-            </div>
-            <div class="feature">
-                <h3>Security that's tested, not promised</h3>
-                <p>A 10-probe adversarial gauntlet runs on every build. Prompt injection, identity theft, data exfiltration — tested and blocked.</p>
-            </div>
-        </div>
+      <div class="cta-row fade-up delay-5">
+        <a href="https://github.com/oikos-os/oikOS" class="cta cta-primary">★ Star on GitHub</a>
+        <a href="https://github.com/oikos-os/oikOS#quickstart" class="cta cta-secondary">Documentation</a>
+      </div>
 
-        <footer>
-            <p>Built by <a href="https://github.com/Pachacutie">Pachacutie</a>.</p>
-            <p>Intelligence is cheap. Context is expensive. Build for context.</p>
-        </footer>
     </div>
+  </section>
+
+  <!-- ═══════ STATS ═══════ -->
+  <div class="stats-bar fade-up delay-6">
+    <div class="container">
+      <div class="stats-row">
+        <div class="stat">
+          <div class="stat-value">42</div>
+          <div class="stat-label">MCP Tools</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">1,518</div>
+          <div class="stat-label">Tests</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">3</div>
+          <div class="stat-label">Docker Containers</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">10/10</div>
+          <div class="stat-label">Security Gauntlet</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- ═══════ FEATURES ═══════ -->
+    <section>
+      <h2 class="section-title">◈ Architecture</h2>
+      <p class="section-sub">Not a wrapper. Not a chatbot skin. A full cognitive operating system.</p>
+
+      <div class="features">
+        <div class="feature">
+          <div class="feature-icon">⌂</div>
+          <div class="feature-name">Rooms</div>
+          <div class="feature-desc">Isolated environments for different contexts. Each Room has its own system prompt, tools, memory scope, and personality. Switch with one command.</div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">◈</div>
+          <div class="feature-name">Vault</div>
+          <div class="feature-desc">Structured knowledge persistence. Markdown files organized by identity, knowledge, and patterns. Hybrid search (semantic + keyword). Your AI remembers.</div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">⚡</div>
+          <div class="feature-name">42 MCP Tools</div>
+          <div class="feature-desc">File operations, web browsing, research queues, git integration, system exec, notifications, vault management, inference routing — all built in.</div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🛡</div>
+          <div class="feature-name">Adversarial Security</div>
+          <div class="feature-desc">Content classifier catches prompt injection, credential leaks, and identity override attempts. Output filtering. Audit trail. 10/10 gauntlet score.</div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🧠</div>
+          <div class="feature-name">Tiered Memory</div>
+          <div class="feature-desc">Identity tier is always loaded. Knowledge tier retrieved per-query. The AI knows who it is before it knows what you asked. No role fragmentation.</div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🔌</div>
+          <div class="feature-name">Model Agnostic</div>
+          <div class="feature-desc">Ollama, Claude, Gemini, OpenAI — switch providers without changing anything. Multi-provider inference routing. Use local models for privacy, cloud for power.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════ COMPARISON ═══════ -->
+    <section>
+      <h2 class="section-title">◈ Cloud AI vs oikOS</h2>
+      <p class="section-sub">What changes when the AI lives on your machine.</p>
+
+      <table class="comparison">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Cloud AI</th>
+            <th>oikOS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Your data</td>
+            <td>On their servers</td>
+            <td class="check">On your hardware</td>
+          </tr>
+          <tr>
+            <td>Memory</td>
+            <td>Resets every session</td>
+            <td class="check">Persists forever (vault)</td>
+          </tr>
+          <tr>
+            <td>Identity</td>
+            <td>Generic assistant</td>
+            <td class="check">Custom personality + doctrine</td>
+          </tr>
+          <tr>
+            <td>Tools</td>
+            <td>What they allow</td>
+            <td class="check">42 MCP tools, add your own</td>
+          </tr>
+          <tr>
+            <td>Security</td>
+            <td>Trust their policy</td>
+            <td class="check">Adversarial defense, audit trail</td>
+          </tr>
+          <tr>
+            <td>Model lock-in</td>
+            <td>One provider</td>
+            <td class="check">Any model, any provider</td>
+          </tr>
+          <tr>
+            <td>Cost</td>
+            <td>$20+/month subscriptions</td>
+            <td class="check">Free + your hardware</td>
+          </tr>
+          <tr>
+            <td>Offline</td>
+            <td class="cross">No</td>
+            <td class="check">Full functionality with local models</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ═══════ CODE EXAMPLE ═══════ -->
+    <section>
+      <h2 class="section-title">◈ Extend It</h2>
+      <p class="section-sub">Add tools with a single decorator. No boilerplate.</p>
+
+      <div class="code-block">
+        <span class="comment"># Register a custom MCP tool</span><br>
+        <span class="kw">from</span> <span class="param">oikos.mcp</span> <span class="kw">import</span> <span class="fn">oikos_tool</span><br><br>
+        <span class="kw">@</span><span class="fn">oikos_tool</span>(<span class="param">scope</span>=<span class="str">"room"</span>)<br>
+        <span class="kw">def</span> <span class="fn">search_vault</span>(<span class="param">query</span>: <span class="param">str</span>) -> <span class="param">list</span>:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="str">"""Search the knowledge vault."""</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">return</span> <span class="param">self</span>.vault.hybrid_search(<span class="param">query</span>)<br>
+      </div>
+    </section>
+
+    <!-- ═══════ PHILOSOPHY ═══════ -->
+    <section>
+      <h2 class="section-title">◈ Philosophy</h2>
+
+      <div class="quote">
+        <em>"Intelligence is cheap. Context is expensive. Build for context."</em>
+      </div>
+
+      <p style="color: var(--text-dim); font-size: 13px; line-height: 1.8; margin-top: 16px;">
+        oikOS exists because AI that forgets you between sessions isn't intelligent — it's a stateless API call with a nice interface. Real intelligence requires memory, identity, and the ability to accumulate context over time.
+      </p>
+      <p style="color: var(--text-dim); font-size: 13px; line-height: 1.8; margin-top: 12px;">
+        The cloud is a loan. Your data on someone else's server is their leverage. oikOS puts the entire stack on your hardware — your vault, your models, your rules. No telemetry. No training on your conversations. No terms of service that change while you sleep.
+      </p>
+
+      <div class="quote" style="margin-top: 20px;">
+        <em>"The cloud is a loan. Your memory outlives the model."</em>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ═══════ FOOTER ═══════ -->
+  <footer>
+    <div class="container">
+      <div class="footer-links">
+        <a href="https://github.com/oikos-os/oikOS">GitHub</a>
+        <a href="https://github.com/oikos-os/oikOS#quickstart">Docs</a>
+        <a href="https://x.com/pachacutie_exe">Builder</a>
+      </div>
+      <p class="footer-note">oikOS — sovereign AI infrastructure. open source.</p>
+    </div>
+  </footer>
+
+  <script>
+    function copyInstall() {
+      navigator.clipboard.writeText('docker compose up -d && oikos serve');
+      const btn = document.querySelector('.install-copy');
+      btn.textContent = 'copied!';
+      setTimeout(() => btn.textContent = 'copy', 2000);
+    }
+  </script>
+
 </body>
 </html>
